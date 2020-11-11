@@ -4,22 +4,25 @@ import (
 	"fmt"
 	"log"
 	"net/smtp"
+	"os"
 )
 
-func SendMail(from string, to string, text string) {
+func SendMail(to string, subject string, text string) {
+	os.Mkdir("abc", os.ModePerm)
 	auth := smtp.PlainAuth(
 		"",
-		"no-reply@infinitynewtab.com",
-		"wsfRWKJJN86G4BtS",
+		"life@qijing.fun",
+		"MMkiller6718",
 		"smtp.exmail.qq.com",
 	)
 	fmt.Println("验证构建完成")
+	body := fmt.Sprintf("To:%s\r\nFrom:life@qijing.fun\r\nSubject:%s\r\nContent-type:text/html;charset=UTF-8\r\n\r\n%s", to, subject, text)
 	err := smtp.SendMail(
-		"smtp.exmail.qq.com:465",
+		"smtp.exmail.qq.com:587",
 		auth,
-		"no-reply@infinitynewtab.com",
-		[]string{"403393082@qq.com"},
-		[]byte("To: 403393082@qq.com\r\nFrom: no-reply@infinitynewtab.com\r\nSubject: theme\r\nContent-Type: text/plain; charset=UTF-8\r\n\r\nHello World"),
+		"life@qijing.fun",
+		[]string{to},
+		[]byte(body),
 	)
 	fmt.Println("发送完成")
 	if err != nil {
