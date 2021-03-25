@@ -4,15 +4,13 @@ import (
 	"fmt"
 	"log"
 	"net/smtp"
-	"os"
 )
 
 func SendMail(to string, subject string, text string) {
-	os.Mkdir("abc", os.ModePerm)
 	auth := smtp.PlainAuth(
 		"",
 		"life@qijing.fun",
-		"MMkiller6718",
+		"USb7N9uKda5upc8f",
 		"smtp.exmail.qq.com",
 	)
 	fmt.Println("验证构建完成")
