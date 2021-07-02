@@ -1,6 +1,6 @@
 {{ define "warning" }}
 <center>
-  <table align="center" bgcolor="#EFEEEA" border="0" cellpadding="0" cellspacing="0" height="100%" width="100%"
+  <table align="center" bgcolor="#EFEEEA" border="0" cellpadding="0" cellspacing="0" height="100%" width="50%"
     id="bodyTable">
     <tbody>
       <tr>
@@ -46,7 +46,14 @@
                           style="padding-right:40px; padding-bottom:40px; padding-left:40px; ">
                           <h1
                             style="color:#241C15; font-family:Georgia, Times, 'Times New Roman', serif; font-size:30px; font-style:normal; font-weight:400; line-height:42px; letter-spacing:normal; margin:0; padding:0; text-align:center;">
-                            扩展迷服务器发生了问题<br>{{ .Time }}</h1>
+                            扩展迷服务器发生了问题<br>
+                          </h1>
+                          <h5
+                            style="color:#241C15; font-family:Georgia, Times, 'Times New Roman', serif; font-size:14px; font-style:normal; font-weight:400; line-height:42px; letter-spacing:normal; margin:0; padding:0; text-align:center;"
+                            
+                            >
+                            {{.Detail}}
+                          </h5>
                         </td>
                       </tr>
                       <tr>

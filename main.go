@@ -1,36 +1,46 @@
 package main
 
 import (
+	"bytes"
 	"fmt"
 	"html/template"
-	"io/ioutil"
 	"mail/send"
 	"os"
 )
 
 func main() {
-	var to string
 	var subject string
-	var content string
-	fmt.Println("请输入接收者邮箱：")
-	fmt.Scanln(&to)
-	fmt.Println("请输入邮件主题：")
-	fmt.Scanln(&subject)
-	tpl := template.Must(
-		template.ParseFiles("./send/body.html"),
-	)
-	htmlstring := tpl.ExecuteTemplate(os.Stdout, "warning", map[string]interface{}{
-		"Time": "2021.03.25 14:00",
-	})
-	fmt.Println(htmlstring)
-	bytes, error := ioutil.ReadFile("./send/body.html")
-	var bodyString string
-	fmt.Println(bodyString)
-	if error != nil {
-		fmt.Println(error)
-	} else {
-		bodyString = string(bytes)
+	//io.Write是通过流的形式写。所以不一定一次会全部写入
+	//第一个参数标题，第二个参数正文，第三个到最后一个的参数是要发送的邮件们。
+	//第一个参数应该为级别，info,warning, error
+	b := new(bytes.Buffer)
+	args := os.Args
+	var tempKey int
+	var emails []string
+	for k, v := range args {
+		if v == "|||" {
+			tempKey = k + 1
+			break
+		}
+
 	}
-	content = bodyString
-	send.SendMail(to, subject, content)
+	//template.HTML可以阻止golang转义html标签
+	htmlstring := template.HTML(args[2])
+	emails = args[tempKey:]
+	//to = args[1]
+	subject = args[1]
+
+	tpl := template.Must(
+		template.ParseFiles("./body.html"),
+	)
+
+	err := tpl.ExecuteTemplate(b, "warning", map[string]interface{}{
+		"Detail": htmlstring,
+	})
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	send.SendMail(emails, subject, b.String())
+
 }

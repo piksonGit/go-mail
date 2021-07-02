@@ -6,7 +6,7 @@ import (
 	"net/smtp"
 )
 
-func SendMail(to string, subject string, text string) {
+func SendMail(to []string, subject string, text string) {
 	auth := smtp.PlainAuth(
 		"",
 		"life@qijing.fun",
@@ -19,7 +19,7 @@ func SendMail(to string, subject string, text string) {
 		"smtp.exmail.qq.com:587",
 		auth,
 		"life@qijing.fun",
-		[]string{to},
+		to,
 		[]byte(body),
 	)
 	fmt.Println("发送完成")
