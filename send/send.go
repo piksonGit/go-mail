@@ -1,24 +1,27 @@
 package send
 
 import (
+	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"net/smtp"
 )
 
 func SendMail(to []string, subject string, text string) {
+	smptinfo := ReadJson("./smtpinfo.json")
 	auth := smtp.PlainAuth(
 		"",
-		"life@qijing.fun",
-		"USb7N9uKda5upc8f",
-		"smtp.exmail.qq.com",
+		smptinfo["email"],
+		smptinfo["password"],
+		smptinfo["host"],
 	)
 	fmt.Println("验证构建完成")
-	body := fmt.Sprintf("To:%s\r\nFrom:life@qijing.fun\r\nSubject:%s\r\nContent-type:text/html;charset=UTF-8\r\n\r\n%s", to, subject, text)
+	body := fmt.Sprintf("To:%s\r\nFrom:%s\r\nSubject:%s\r\nContent-type:text/html;charset=UTF-8\r\n\r\n%s", to, smptinfo["email"], subject, text)
 	err := smtp.SendMail(
-		"smtp.exmail.qq.com:587",
+		smptinfo["hostandport"],
 		auth,
-		"life@qijing.fun",
+		smptinfo["email"],
 		to,
 		[]byte(body),
 	)
@@ -28,4 +31,18 @@ func SendMail(to []string, subject string, text string) {
 		log.Fatal(err)
 		fmt.Println(err)
 	}
+}
+
+func ReadJson(filepath string) map[string]string {
+	data, err := ioutil.ReadFile(filepath)
+	if err != nil {
+		fmt.Println("读取json配置错误")
+	}
+	var jsonContent map[string]string = make(map[string]string)
+	// Unmarshal第二个参数必须是指针
+	err = json.Unmarshal(data, &jsonContent)
+	if err != nil {
+		fmt.Println("json解析出错", err)
+	}
+	return jsonContent
 }
